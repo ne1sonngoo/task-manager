@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
-import { TextInput, PrimaryButton } from "../components/ui";
 
 export default function LoginPage() {
   const nav = useNavigate();
@@ -10,7 +9,6 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -21,7 +19,6 @@ export default function LoginPage() {
 
     try {
       const data = await login({ email, password });
-      // backend returns { accessToken }
       loginAndSaveToken(data.accessToken);
       nav("/tasks");
     } catch (err) {
@@ -32,43 +29,73 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md rounded-lg border bg-white p-6">
-      <h1 className="text-xl font-semibold">Log in</h1>
-      <p className="mt-1 text-sm text-slate-600">
-        Need an account?{" "}
-        <Link className="underline" to="/register">
-          Register
-        </Link>
-      </p>
+    <div className="mx-auto max-w-md">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-sm backdrop-blur">
+        <div className="mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+            <span className="h-2 w-2 rounded-full bg-emerald-400/80" />
+            Secure Login
+          </div>
 
-      {error ? (
-        <div className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {error}
+          <h1 className="mt-4 text-2xl font-semibold tracking-tight text-white">
+            Welcome back
+          </h1>
+          <p className="mt-1 text-sm text-white/50">
+            Log in to manage your tasks.{" "}
+            <Link
+              className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white/60"
+              to="/register"
+            >
+              Create an account
+            </Link>
+          </p>
         </div>
-      ) : null}
 
-      <form className="mt-6 space-y-4" onSubmit={onSubmit}>
-        <TextInput
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          autoComplete="email"
-          required
-        />
-        <TextInput
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="current-password"
-          required
-        />
+        {error ? (
+          <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-200">
+            {error}
+          </div>
+        ) : null}
 
-        <PrimaryButton disabled={loading} type="submit">
-          {loading ? "Logging in..." : "Login"}
-        </PrimaryButton>
-      </form>
+        <form className="space-y-4" onSubmit={onSubmit}>
+          <label className="block">
+            <div className="mb-1 text-sm font-medium text-white/80">Email</div>
+            <input
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-white/20"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </label>
+
+          <label className="block">
+            <div className="mb-1 text-sm font-medium text-white/80">Password</div>
+            <input
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-white/20"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+            />
+          </label>
+
+          <button
+            disabled={loading}
+            className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white hover:opacity-95 disabled:opacity-50"
+            type="submit"
+          >
+            {loading ? "Logging in…" : "Login"}
+          </button>
+        </form>
+
+        <div className="mt-6 text-xs text-white/40">
+          If your JWT expires, you’ll be redirected to login automatically.
+        </div>
+      </div>
     </div>
   );
 }

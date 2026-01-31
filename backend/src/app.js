@@ -3,6 +3,10 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 
+const cors = require("cors");
+
+
+
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const taskRoutes = require('./routes/tasks');
@@ -10,6 +14,8 @@ const taskRoutes = require('./routes/tasks');
 const authenticateToken = require('./middleware/authenticateToken');
 
 // Auth endpoints:
+app.use(cors({ origin: "http://localhost:5173" }));
+
 app.use('/auth', authRoutes);
 app.use('/users', userRoutes);
 app.use('/tasks', authenticateToken, taskRoutes);

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api/client";
-import { TextInput, PrimaryButton } from "../components/ui";
 
 export default function RegisterPage() {
   const nav = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +19,6 @@ export default function RegisterPage() {
 
     try {
       await register({ name, email, password });
-      // Your backend does NOT return a token on register, so we send them to login.
       nav("/login");
     } catch (err) {
       setError(err.message || "Register failed");
@@ -29,50 +28,85 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto max-w-md rounded-lg border bg-white p-6">
-      <h1 className="text-xl font-semibold">Create account</h1>
-      <p className="mt-1 text-sm text-slate-600">
-        Already have an account?{" "}
-        <Link className="underline" to="/login">
-          Log in
-        </Link>
-      </p>
+    <div className="mx-auto max-w-md">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-sm backdrop-blur">
+        <div className="mb-6">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+            <span className="h-2 w-2 rounded-full bg-indigo-400/80" />
+            Create Account
+          </div>
 
-      {error ? (
-        <div className="mt-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {error}
+          <h1 className="mt-4 text-2xl font-semibold tracking-tight text-white">
+            Get started
+          </h1>
+          <p className="mt-1 text-sm text-white/50">
+            Register, then log in to get your JWT.{" "}
+            <Link
+              className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white/60"
+              to="/login"
+            >
+              Already have an account?
+            </Link>
+          </p>
         </div>
-      ) : null}
 
-      <form className="mt-6 space-y-4" onSubmit={onSubmit}>
-        <TextInput
-          label="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          autoComplete="name"
-          required
-        />
-        <TextInput
-          label="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          autoComplete="email"
-          required
-        />
-        <TextInput
-          label="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          autoComplete="new-password"
-          required
-        />
+        {error ? (
+          <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-200">
+            {error}
+          </div>
+        ) : null}
 
-        <PrimaryButton disabled={loading} type="submit">
-          {loading ? "Creating..." : "Register"}
-        </PrimaryButton>
-      </form>
+        <form className="space-y-4" onSubmit={onSubmit}>
+          <label className="block">
+            <div className="mb-1 text-sm font-medium text-white/80">Name</div>
+            <input
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-white/20"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              autoComplete="name"
+              placeholder="Your name"
+              required
+            />
+          </label>
+
+          <label className="block">
+            <div className="mb-1 text-sm font-medium text-white/80">Email</div>
+            <input
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-white/20"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </label>
+
+          <label className="block">
+            <div className="mb-1 text-sm font-medium text-white/80">Password</div>
+            <input
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none focus:border-white/20"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
+              required
+            />
+          </label>
+
+          <button
+            disabled={loading}
+            className="w-full rounded-xl bg-gradient-to-r from-indigo-500 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-white hover:opacity-95 disabled:opacity-50"
+            type="submit"
+          >
+            {loading ? "Creating…" : "Register"}
+          </button>
+        </form>
+
+        <div className="mt-6 text-xs text-white/40">
+          You’ll be redirected to login after registration.
+        </div>
+      </div>
     </div>
   );
 }
