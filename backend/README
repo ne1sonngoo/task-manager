@@ -1,0 +1,47 @@
+# Task Manager Backend
+
+This is a Node.js + Express + PostgreSQL backend for a simple task management application. It supports creating users, managing tasks, and updating task status.
+
+## Features
+
+- Create and retrieve users
+- Create, retrieve, update, and delete tasks
+- Connects to PostgreSQL database using `pg` and `.env` for credentials
+- RESTful API structure
+
+## Tech Stack
+
+- Node.js
+- Express
+- PostgreSQL
+- dotenv
+
+## Step 1 — Install Postman
+
+1. Go to [Postman website](https://www.postman.com/downloads/) → Download and install.
+2. Open Postman.
+
+---
+
+## Step 2 — Test the API
+
+1. Make sure your **Node.js server is running** (`node src/app.js` in terminal).
+   - Should see: `Server running on port 3000`.
+
+2. Open Postman → click **New → HTTP Request**.
+
+---
+
+### Example 1 — Create a user
+
+- Method: `POST`
+- URL: `http://localhost:3000/users`
+- Body → Select **raw → JSON**
+- Enter:
+
+```json
+{
+  "name": "Alice",
+  "email": "alice@example.com"
+}
+```
